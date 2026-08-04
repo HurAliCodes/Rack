@@ -1,5 +1,93 @@
-node_modules
-# Keep environment variables out of version control
-.env
+# ==============================================================================
+# 📦 DEPENDENCIES & WORKSPACES
+# ==============================================================================
+node_modules/
+jspm_packages/
+web_modules/
+.pnpm-store/
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
 
-/src/generated/prisma
+# ==============================================================================
+# 🚀 BUILD ARTIFACTS & OUTPUTS
+# ==============================================================================
+# Frontend builds (Next.js, Vite, Nuxt, React, etc.)
+dist/
+build/
+.next/
+.nuxt/
+.out/
+out/
+.docusaurus/
+
+# Backend / Server builds
+.serverless/
+.anchor/
+target/
+
+# Type generation / Compiled code
+*.tsbuildinfo
+*.js.map
+*.pyd
+
+# ==============================================================================
+# 🔑 SECRETS, ENVIRONMENT & CONFIGS
+# ==============================================================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.env.*
+!.env.example
+
+# S3 / Cloud / Database credentials
+.aws/
+.gcloud/
+firebase-debug.log
+.vercel/
+.turbo/
+
+# ==============================================================================
+# 🛠️ MONOREPO & BUILD TOOLS CACHES
+# ==============================================================================
+# Turbo, Nx, Lerna, etc.
+.turbo/
+.nx/
+.pnpm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ==============================================================================
+# 🧪 TESTING & COVERAGE
+# ==============================================================================
+coverage/
+.nyc_output/
+.playwright/
+playwright-report/
+test-results/
+
+# ==============================================================================
+# 💻 IDEs, EDITORS & OS FILES
+# ==============================================================================
+# System files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+
+# IntelliJ / WebStorm
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
