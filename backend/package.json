@@ -1,0 +1,13 @@
+{
+  "name": "rack-backend",
+  "version": "1.0.0",
+  "description": "Modular backend infrastructure",
+  "main": "src/server.ts",
+  "scripts": {
+    "dev": "ts-node-dev --respawn src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
