@@ -127,6 +127,7 @@ export const getMe = async (
   next: NextFunction,
 ) => {
   try {
+
     if (!req.user) {
       throw new AppError(
         "Authentication required",
@@ -134,7 +135,7 @@ export const getMe = async (
         "UNAUTHORIZED",
       );
     }
-    
+
     const user = await authService.getCurrentUser(req.user.id);
 
     return successResponse(res, {
