@@ -6,6 +6,8 @@ import { env } from "../../config/env";
 import { AppError } from "../../shared/errors/AppError";
 import { AUTH_ERRORS } from "./constants";
 import * as repository from "./repository";
+import { sendEmail } from "../../infrastructure/email/email";
+
 import type {
   AuthTokens,
   LoginInput,
@@ -200,3 +202,109 @@ export const logout = async (
     storedToken.id,
   );
 };
+
+export const requestPasswordReset = async (
+  email: string,
+): Promise<void> => {
+  const user = await repository.findUserByEmail(email);
+
+  if (!user) {
+    return;
+  }
+
+  const token = generateRefreshToken();
+
+  await repository.createPasswordResetToken({
+    tokenHash: hashToken(token),
+    userId: user.id,
+    expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+  });
+
+  const resetUrl =
+    `${env.FRONTEND_URL}/reset-password?token=${token}`;
+
+  await sendEmail({
+    to: user.email,
+    subject: "Reset your AI Digital Wardrobe password",
+    html: `
+      <h2>Password Reset</h2>
+
+      <p>You requested to reset your password.</p>
+
+      <p>
+        Click the link below to create a new password:
+      </p>
+
+      <p>
+        <a href="${resetUrl}">
+          Reset Password
+        </a>
+      </p>
+
+      <p>This link expires in 15 minutes.</p>
+
+      <p>
+        If you didn't request this, you can safely ignore this email.
+      </p>
+    `,
+  });
+};
+
+export const resetPassword = async (
+  token: string,
+  newPassword: string,
+): Promise<void> => {
+  const tokenHash = hashToken(token);
+
+  const resetToken =
+    await repository.findPasswordResetToken(tokenHash);
+
+  if (
+    !resetToken ||
+    resetToken.usedAt !== null ||
+    resetToken.expiresAt <= new Date()
+  ) {
+    throw new AppError(
+      "Invalid or expired password reset token",
+      400,
+      AUTH_ERRORS.INVALID_RESET_TOKEN,
+    );
+  }
+
+  const passwordHash = await bcrypt.hash(
+    newPassword,
+    SALT_ROUNDS,
+  );
+
+  await repository.updateUserPassword(
+    resetToken.userId,
+    passwordHash,
+  );
+
+  await repository.markPasswordResetTokenUsed(
+    resetToken.id,
+  );
+};
+
+// export const requestPasswordReset = async (
+//   email: string,
+// ): Promise<string | null> => {
+//   const user = await repository.findUserByEmail(email);
+
+//   // Don't reveal whether an email exists.
+//   if (!user) {
+//     return null;
+//   }
+
+//   const token = generateRefreshToken();
+
+//   await repository.createPasswordResetToken({
+//     tokenHash: hashToken(token),
+//     userId: user.id,
+//     expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+//   });
+
+//   // Temporary:
+//   // In the next step we'll send this through an email service.
+//   return token;
+// };

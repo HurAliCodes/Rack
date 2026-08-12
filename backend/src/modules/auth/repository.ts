@@ -40,12 +40,14 @@ export const createRefreshToken = (data: {
   tokenHash: string;
   userId: string;
   expiresAt: Date;
+  replacedByTokenId?: string;
 }) => {
   return prisma.refreshToken.create({
     data: {
       tokenHash: data.tokenHash,
       userId: data.userId,
       expiresAt: data.expiresAt,
+      replacedByTokenId: data.replacedByTokenId,
     },
   });
 };
@@ -68,6 +70,49 @@ export const revokeRefreshToken = (id: string) => {
     },
     data: {
       revokedAt: new Date(),
+    },
+  });
+};
+
+export const createPasswordResetToken = (data: {
+  tokenHash: string;
+  userId: string;
+  expiresAt: Date;
+}) => {
+  return prisma.passwordResetToken.create({
+    data,
+  });
+};
+
+export const findPasswordResetToken = (tokenHash: string) => {
+  return prisma.passwordResetToken.findUnique({
+    where: {
+      tokenHash,
+    },
+  });
+};
+
+export const markPasswordResetTokenUsed = (id: string) => {
+  return prisma.passwordResetToken.update({
+    where: {
+      id,
+    },
+    data: {
+      usedAt: new Date(),
+    },
+  });
+};
+
+export const updateUserPassword = (
+  userId: string,
+  passwordHash: string,
+) => {
+  return prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      passwordHash,
     },
   });
 };

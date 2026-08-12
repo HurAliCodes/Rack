@@ -62,3 +62,63 @@ export const logout = async (
     next(error);
   }
 };
+
+export const resetPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { token, password } = req.body;
+
+    await authService.resetPassword(token, password);
+    
+    return successResponse(res, {
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}; 
+
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { email } = req.body;
+
+    await authService.requestPasswordReset(email);
+
+    return successResponse(res, {
+      message:
+        "If an account exists with that email, a password reset link has been sent.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// export const forgotPassword = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ) => {
+//   try {
+//     const { email } = req.body;
+
+//     const token =
+//       await authService.requestPasswordReset(email);
+
+//     return successResponse(res, {
+//       message:
+//         "If an account exists with that email, a password reset link has been sent.",
+//       ...(process.env.NODE_ENV === "development" && token
+//         ? { developmentToken: token }
+//         : {}),
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
