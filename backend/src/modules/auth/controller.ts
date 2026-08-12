@@ -100,6 +100,46 @@ export const forgotPassword = async (
   }
 };
 
+export const verifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { token } = req.body;
+
+    await authService.verifyEmail(token);
+
+    return successResponse(res, {
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const getMe = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user = await authService.getCurrentUser(req.user.id);
+
+    return successResponse(res, {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      emailVerified: user.emailVerified,
+      profile: user.profile,
+      createdAt: user.createdAt,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // export const forgotPassword = async (
 //   req: Request,
 //   res: Response,

@@ -116,3 +116,48 @@ export const updateUserPassword = (
     },
   });
 };
+
+export const createEmailVerificationToken = (data: {
+  tokenHash: string;
+  userId: string;
+  expiresAt: Date;
+}) => {
+  return prisma.emailVerificationToken.create({
+    data,
+  });
+};
+
+export const findEmailVerificationToken = (
+  tokenHash: string,
+) => {
+  return prisma.emailVerificationToken.findUnique({
+    where: {
+      tokenHash,
+    },
+  });
+};
+
+export const markEmailVerificationTokenUsed = (
+  id: string,
+) => {
+  return prisma.emailVerificationToken.update({
+    where: {
+      id,
+    },
+    data: {
+      usedAt: new Date(),
+    },
+  });
+};
+
+export const markUserEmailVerified = (userId: string) => {
+  return prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      emailVerified: true,
+    },
+  });
+};
+
