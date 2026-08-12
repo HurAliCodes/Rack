@@ -13,9 +13,17 @@ export const validate = (schema: ZodObject<any>) => {
       return next(result.error);
     }
 
-    req.body = result.data.body;
-    req.query = result.data.query as any;
-    req.params = result.data.params as any;
+    if (result.data.body) {
+      Object.assign(req.body, result.data.body);
+    }
+    
+    if (result.data.query) {
+      Object.assign(req.query, result.data.query);
+    }
+    
+    if (result.data.params) {
+      Object.assign(req.params, result.data.params);
+    }
 
     next();
   };
