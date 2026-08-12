@@ -127,14 +127,6 @@ export const getMe = async (
   next: NextFunction,
 ) => {
   try {
-    if (!req.user) {
-      throw new AppError(
-        "Authentication required",
-        401,
-        "UNAUTHORIZED",
-      );
-    }
-    
     const user = await authService.getCurrentUser(req.user.id);
 
     return successResponse(res, {
