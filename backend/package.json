@@ -11,7 +11,8 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "lint": "eslint .",
-    "test": "vitest"
+    "test": "vitest",
+    "test:watch": "vitest"
   },
   "directories": {
     "doc": "docs",

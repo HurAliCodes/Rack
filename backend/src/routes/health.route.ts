@@ -3,9 +3,12 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/", (_, res) => {
-  res.json({
+  res.status(200).json({
     success: true,
-    message: "RACK API Running",
+    data: {
+      status: "ok",
+      timestamp: new Date().toISOString(),
+    },
   });
 });
 

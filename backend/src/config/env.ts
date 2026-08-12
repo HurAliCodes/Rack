@@ -1,17 +1,20 @@
-import { z } from "zod";
+import { z } from 'zod';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const envSchema = z.object({
-  NODE_ENV: z.enum(["development", "production", "test"]),
+  
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 
-  PORT: z.coerce.number(),
+  PORT: z.string().default('5000'),
 
-  DATABASE_URL: z.string(),
+  DATABASE_URL: z.string().url().refine(
+    (url) => url.startsWith('postgresql://'),
+    'DATABASE_URL must be a valid PostgreSQL connection string'
+  ),
 
-  JWT_SECRET: z.string(),
-
-  JWT_REFRESH_SECRET: z.string(),
-
-  REDIS_URL: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
+export type Env = z.infer<typeof envSchema>;

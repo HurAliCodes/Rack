@@ -91,3 +91,6 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+
+logs/
