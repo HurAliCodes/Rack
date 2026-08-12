@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 
 import * as authService from "./service";
 import { successResponse } from "../../shared/utils/apiResponse";
+import { AuthRequest } from "../../shared/middleware/auth";
+import { AppError } from "@/shared/errors/AppError";
 
 export const register = async (
   req: Request,
@@ -94,6 +96,54 @@ export const forgotPassword = async (
     return successResponse(res, {
       message:
         "If an account exists with that email, a password reset link has been sent.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { token } = req.body;
+
+    await authService.verifyEmail(token);
+
+    return successResponse(res, {
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const getMe = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    if (!req.user) {
+      throw new AppError(
+        "Authentication required",
+        401,
+        "UNAUTHORIZED",
+      );
+    }
+    
+    const user = await authService.getCurrentUser(req.user.id);
+
+    return successResponse(res, {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      emailVerified: user.emailVerified,
+      profile: user.profile,
+      createdAt: user.createdAt,
     });
   } catch (error) {
     next(error);

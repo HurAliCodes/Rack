@@ -14,6 +14,8 @@ import type {
   RegisterInput,
 } from "./types";
 
+import { findUserById } from "./repository";
+
 const SALT_ROUNDS = 12;
 
 const generateAccessToken = (
@@ -75,6 +77,39 @@ export const register = async (
     email: input.email,
     passwordHash,
     name: input.name,
+  });
+
+  const verificationToken = generateRefreshToken();
+
+  await repository.createEmailVerificationToken({
+    tokenHash: hashToken(verificationToken),
+    userId: user.id,
+    expiresAt: new Date(
+      Date.now() + 24 * 60 * 60 * 1000,
+    ),
+  });
+
+  const verificationUrl =
+    `${env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+  await sendEmail({
+    to: user.email,
+    subject: "Verify your AI Digital Wardrobe email",
+    html: `
+      <h2>Welcome to AI Digital Wardrobe!</h2>
+
+      <p>
+        Please verify your email address to activate your account.
+      </p>
+
+      <p>
+        <a href="${verificationUrl}">
+          Verify Email
+        </a>
+      </p>
+
+      <p>This link expires in 24 hours.</p>
+    `,
   });
 
   const accessToken = generateAccessToken(
@@ -284,6 +319,51 @@ export const resetPassword = async (
   await repository.markPasswordResetTokenUsed(
     resetToken.id,
   );
+};
+
+export const verifyEmail = async (
+  token: string,
+): Promise<void> => {
+  const tokenHash = hashToken(token);
+
+  const verificationToken =
+    await repository.findEmailVerificationToken(
+      tokenHash,
+    );
+
+  if (
+    !verificationToken ||
+    verificationToken.usedAt !== null ||
+    verificationToken.expiresAt <= new Date()
+  ) {
+    throw new AppError(
+      "Invalid or expired verification token",
+      400,
+      AUTH_ERRORS.INVALID_VERIFICATION_TOKEN,
+    );
+  }
+
+  await repository.markUserEmailVerified(
+    verificationToken.userId,
+  );
+
+  await repository.markEmailVerificationTokenUsed(
+    verificationToken.id,
+  );
+};
+
+export const getCurrentUser = async (userId: string) => {
+  const user = await findUserById(userId);
+
+  if (!user) {
+    throw new AppError(
+      "User not found",
+      404,
+      AUTH_ERRORS.USER_NOT_FOUND
+    );
+  }
+
+  return user;
 };
 
 // export const requestPasswordReset = async (
