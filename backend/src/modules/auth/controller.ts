@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import * as authService from "./service";
 import { successResponse } from "../../shared/utils/apiResponse";
 import { AuthRequest } from "../../shared/middleware/auth";
-import { AppError } from "@/shared/errors/AppError";
+import { AppError } from "../../shared/errors/AppError";
 
 export const register = async (
   req: Request,
@@ -83,25 +83,6 @@ export const resetPassword = async (
   }
 }; 
 
-export const forgotPassword = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const { email } = req.body;
-
-    await authService.requestPasswordReset(email);
-
-    return successResponse(res, {
-      message:
-        "If an account exists with that email, a password reset link has been sent.",
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const verifyEmail = async (
   req: Request,
   res: Response,
@@ -150,26 +131,27 @@ export const getMe = async (
     next(error);
   }
 };
+export const forgotPassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { email } = req.body;
 
-// export const forgotPassword = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction,
-// ) => {
-//   try {
-//     const { email } = req.body;
+    const token = await authService.requestPasswordReset(email);
 
-//     const token =
-//       await authService.requestPasswordReset(email);
+    const responseData: any = {
+      message: "If an account exists with that email, a password reset link has been sent.",
+    };
 
-//     return successResponse(res, {
-//       message:
-//         "If an account exists with that email, a password reset link has been sent.",
-//       ...(process.env.NODE_ENV === "development" && token
-//         ? { developmentToken: token }
-//         : {}),
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    // Return token in test environment
+    if ((process.env.NODE_ENV === 'test') && token) {
+      responseData.developmentToken = token;
+    }
+
+    return successResponse(res, responseData);
+  } catch (error) {
+    next(error);
+  }
+};

@@ -27,14 +27,21 @@ model User {
 }
 
 model Profile {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  name      String?
+  id String @id @default(uuid())
+  name String?
   avatarUrl String?
-  gender    String?
-  height    Float?
-  weight    Float?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gender String?
+  height Float?
+  weight Float?
+  preferredStyles String[]
+  favoriteColors String[]
+  topSize String?
+  bottomSize String?
+  shoeSize String?
+  theme String @default("light")
+  notificationsEnabled Boolean @default(true)
+  userId String @unique
+  user User @relation( fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
