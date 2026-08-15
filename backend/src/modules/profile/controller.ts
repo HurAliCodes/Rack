@@ -1,4 +1,4 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Response, Request } from "express";
 
 import { AuthRequest } from "../../shared/middleware/auth";
 import { successResponse } from "../../shared/utils/apiResponse";
@@ -34,6 +34,55 @@ export const updateProfile = async (
     );
 
     return successResponse(res, profile);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateAvatar = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const file = req.file;
+
+    if (!file) {
+      throw new Error(
+        "Avatar image is required",
+      );
+    }
+
+    const profile =
+      await profileService.updateAvatar(
+        req.user!.id,
+        file,
+      );
+
+    return successResponse(
+      res,
+      profile,
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteAvatar = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const profile =
+      await profileService.deleteAvatar(
+        req.user!.id,
+      );
+
+    return successResponse(
+      res,
+      profile,
+    );
   } catch (error) {
     next(error);
   }

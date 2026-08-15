@@ -20,3 +20,33 @@ export const updateProfile = (
     data,
   });
 };
+
+export const updateAvatar = (
+  userId: string,
+  avatarUrl: string,
+  avatarPublicId: string,
+) => {
+  return prisma.profile.update({
+    where: {
+      userId,
+    },
+    data: {
+      avatarUrl,
+      avatarPublicId,
+    },
+  });
+};
+
+export const removeAvatar = (
+  userId: string,
+) => {
+  return prisma.profile.update({
+    where: {
+      userId,
+    },
+    data: {
+      avatarUrl: null,
+      avatarPublicId: null,
+    },
+  });
+};
