@@ -1,0 +1,67 @@
+import { prisma } from "../../infrastructure/database/prisma";
+
+import {
+  CreateClothingItemInput,
+  UpdateClothingItemInput,
+} from "./types";
+
+export const createClothingItem = (
+  userId: string,
+  data: CreateClothingItemInput,
+) => {
+  return prisma.clothingItem.create({
+    data: {
+      ...data,
+      userId,
+    },
+  });
+};
+
+export const findAllClothingItems = (
+  userId: string,
+) => {
+  return prisma.clothingItem.findMany({
+    where: {
+      userId,
+    },
+
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+export const findClothingItemById = (
+  id: string,
+  userId: string,
+) => {
+  return prisma.clothingItem.findFirst({
+    where: {
+      id,
+      userId,
+    },
+  });
+};
+
+export const updateClothingItem = (
+  id: string,
+  data: UpdateClothingItemInput,
+) => {
+  return prisma.clothingItem.update({
+    where: {
+      id,
+    },
+
+    data,
+  });
+};
+
+export const deleteClothingItem = (
+  id: string,
+) => {
+  return prisma.clothingItem.delete({
+    where: {
+      id,
+    },
+  });
+};

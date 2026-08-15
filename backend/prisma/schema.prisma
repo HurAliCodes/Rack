@@ -12,6 +12,38 @@ enum UserRole {
   ADMIN
 }
 
+enum ClothingCategory {
+  TSHIRT
+  SHIRT
+  POLO
+  HOODIE
+  JACKET
+  SWEATER
+  JEANS
+  PANTS
+  SHORTS
+  JOGGERS
+  DRESS
+  SKIRT
+  SUIT
+  SHOES
+  ACCESSORY
+  UNKNOWN
+}
+
+enum ClothingSeason {
+  SPRING
+  SUMMER
+  AUTUMN
+  WINTER
+  ALL_SEASON
+}
+
+enum ClothingStatus {
+  AVAILABLE
+  ARCHIVED
+}
+
 model User {
   id            String         @id @default(uuid())
   email         String         @unique
@@ -22,6 +54,7 @@ model User {
   refreshTokens RefreshToken[]
   passwordResetTokens PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
+  clothingItems ClothingItem[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -92,4 +125,36 @@ model EmailVerificationToken {
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime  @default(now())
+}
+
+model ClothingItem {
+  id String @id @default(uuid())
+
+  name String?
+
+  category ClothingCategory @default(UNKNOWN)
+
+  brand String?
+
+  color String?
+
+  season ClothingSeason?
+
+  size String?
+
+  notes String?
+
+  favorite Boolean @default(false)
+
+  status ClothingStatus @default(AVAILABLE)
+
+  lastWornAt DateTime?
+
+  userId String
+
+  user User @relation( fields: [userId], references: [id], onDelete: Cascade )
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
 }
