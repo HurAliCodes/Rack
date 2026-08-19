@@ -40,6 +40,10 @@ export const findClothingItemById = (
       id,
       userId,
     },
+
+    include: {
+      images: true,
+    },
   });
 };
 

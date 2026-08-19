@@ -78,7 +78,7 @@ export const register = async (input: RegisterInput): Promise<AuthTokens> => {
   const verificationUrl = `${env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
 
   env.NODE_ENV !== "test" && (
-    await sendEmail({
+    sendEmail({
       to: user.email,
       subject: "Verify your AI Digital Wardrobe email",
       html: `

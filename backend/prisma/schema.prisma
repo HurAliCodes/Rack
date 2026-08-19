@@ -154,7 +154,25 @@ model ClothingItem {
 
   user User @relation( fields: [userId], references: [id], onDelete: Cascade )
 
+  images ClothingImage[]
+
   createdAt DateTime @default(now())
 
   updatedAt DateTime @updatedAt
+}
+
+model ClothingImage {
+  id String @id @default(uuid())
+
+  imageUrl String
+
+  imagePublicId String
+
+  isCover Boolean @default(false)
+
+  clothingItemId String
+
+  clothingItem ClothingItem @relation( fields: [clothingItemId], references: [id], onDelete: Cascade )
+
+  createdAt DateTime @default(now())
 }

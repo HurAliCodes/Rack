@@ -1,0 +1,1 @@
+export { default as clothingImageRoutes } from "./routes";
