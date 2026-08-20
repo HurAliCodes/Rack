@@ -33,15 +33,17 @@ export const getAllClothingItems = async (
   next: NextFunction,
 ) => {
   try {
-    const items =
+    const page = Number(req.query.page ?? 1);
+    const limit = Number(req.query.limit ?? 20);
+
+    const result =
       await wardrobeService.getAllClothingItems(
         req.user!.id,
+        page,
+        limit,
       );
 
-    return successResponse(
-      res,
-      items,
-    );
+    return successResponse(res, result);
   } catch (error) {
     next(error);
   }
