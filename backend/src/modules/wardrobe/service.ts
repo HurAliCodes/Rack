@@ -19,9 +19,13 @@ export const createClothingItem = async (
 
 export const getAllClothingItems = async (
   userId: string,
+  page: number,
+  limit: number,
 ) => {
   return repository.findAllClothingItems(
     userId,
+    page,
+    limit,
   );
 };
 

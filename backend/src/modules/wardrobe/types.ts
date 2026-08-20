@@ -24,3 +24,8 @@ export interface UpdateClothingItemInput {
   status?: ClothingStatus; 
   lastWornAt?: Date;
 }
+
+export interface GetClothingItemsQuery {
+  page: number;
+  limit: number;
+}

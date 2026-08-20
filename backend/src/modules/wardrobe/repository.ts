@@ -17,18 +17,42 @@ export const createClothingItem = (
   });
 };
 
-export const findAllClothingItems = (
+export const findAllClothingItems = async (
   userId: string,
+  page: number,
+  limit: number,
 ) => {
-  return prisma.clothingItem.findMany({
-    where: {
-      userId,
-    },
+  const skip = (page - 1) * limit;
 
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+  const [items, total] = await Promise.all([
+    prisma.clothingItem.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        images: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip,
+      take: limit,
+    }),
+
+    prisma.clothingItem.count({
+      where: {
+        userId,
+      },
+    }),
+  ]);
+
+  return {
+    items,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  };
 };
 
 export const findClothingItemById = (

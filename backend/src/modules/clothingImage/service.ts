@@ -71,46 +71,63 @@ export const getClothingImages =
     );
   };
 
-export const removeClothingImage =
-  async (
-    userId: string,
-    imageId: string,
-  ) => {
-    const image =
-      await repository.findImageById(
-        imageId,
-      );
+export const removeClothingImage = async (
+  userId: string,
+  imageId: string,
+) => {
+  const image = await repository.findImageById(imageId);
 
-    if (!image) {
-      throw new AppError(
-        "Image not found",
-        404,
-        "IMAGE_NOT_FOUND",
-      );
-    }
+  if (!image) {
+    throw new AppError(
+      "Image not found",
+      404,
+      "IMAGE_NOT_FOUND",
+    );
+  }
 
-    const clothingItem =
-      await repository.findClothingItem(
+  const clothingItem = await repository.findClothingItem(
+    image.clothingItemId,
+    userId,
+  );
+
+  if (!clothingItem) {
+    throw new AppError(
+      "Image not found",
+      404,
+      "IMAGE_NOT_FOUND",
+    );
+  }
+
+  const images =
+    await repository.findImagesByClothingItemId(
+      image.clothingItemId,
+    );
+
+  await deleteCloudinaryImage(image.imagePublicId);
+
+  await repository.deleteImage(imageId);
+
+  // If deleted image was the cover,
+  if (image.isCover && images.length > 1) {
+    const nextImage = images.find(
+      (item) => item.id !== imageId,
+    );
+
+    if (nextImage) {
+      await repository.clearCoverImages(
         image.clothingItemId,
-        userId,
       );
 
-    if (!clothingItem) {
-      throw new AppError(
-        "Image not found",
-        404,
-        "IMAGE_NOT_FOUND",
+      await repository.setCoverImage(
+        nextImage.id,
       );
     }
+  }
 
-    await deleteCloudinaryImage(
-      image.imagePublicId,
-    );
-
-    return repository.deleteImage(
-      imageId,
-    );
+  return {
+    message: "Image deleted successfully",
   };
+};
 
 export const makeCoverImage =
   async (

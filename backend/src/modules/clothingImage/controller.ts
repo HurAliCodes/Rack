@@ -59,18 +59,14 @@ export const deleteClothingImage = async (
   next: NextFunction,
 ) => {
   try {
+    const result =
     await clothingImageService.removeClothingImage(
       req.user!.id,
       req.params.id,
     );
 
-    return successResponse(
-      res,
-      {
-        message:
-          "Image deleted successfully",
-      },
-    );
+    return successResponse(res, result);
+
   } catch (error) {
     next(error);
   }
