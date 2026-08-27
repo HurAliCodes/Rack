@@ -42,5 +42,19 @@ export const getClothingItemsSchema = z.object({
   query: z.object({
     page: z.coerce.number().int().positive().default(1),
     limit: z.coerce.number().int().positive().max(100).default(20),
+
+    search: z.string().trim().min(1).optional(),
+
+    category: z.string().optional(),
+    color: z.string().optional(),
+    season: z.string().optional(),
+
+    favorite: z
+      .enum(["true", "false"])
+      .transform((value) => value === "true")
+      .optional(),
+
+    status: z.string().optional(),
+    size: z.string().optional(),
   }),
 });

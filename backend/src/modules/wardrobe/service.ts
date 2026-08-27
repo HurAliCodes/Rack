@@ -21,11 +21,25 @@ export const getAllClothingItems = async (
   userId: string,
   page: number,
   limit: number,
+  search?: string,
+  category?: string,
+  color?: string,
+  season?: string,
+  favorite?: boolean,
+  status?: string,
+  size?: string,
 ) => {
   return repository.findAllClothingItems(
     userId,
     page,
     limit,
+    search,
+    category,
+    color,
+    season,
+    favorite,
+    status,
+    size,
   );
 };
 

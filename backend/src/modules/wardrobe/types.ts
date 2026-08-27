@@ -28,4 +28,11 @@ export interface UpdateClothingItemInput {
 export interface GetClothingItemsQuery {
   page: number;
   limit: number;
+  search?: string;
+  category?: string;
+  color?: string;
+  season?: string;
+  favorite?: boolean;
+  status?: string;
+  size?: string;
 }

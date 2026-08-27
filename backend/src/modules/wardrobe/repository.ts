@@ -21,13 +21,70 @@ export const findAllClothingItems = async (
   userId: string,
   page: number,
   limit: number,
+  search?: string,
+  category?: string,
+  color?: string,
+  season?: string,
+  favorite?: boolean,
+  status?: string,
+  size?: string,
 ) => {
   const skip = (page - 1) * limit;
+  const where = {
+      userId,
+
+      ...(search
+        ? {
+            OR: [
+              {
+                name: {
+                  contains: search,
+                  mode: "insensitive" as const,
+                },
+              },
+              {
+                brand: {
+                  contains: search,
+                  mode: "insensitive" as const,
+                },
+              },
+            ],
+          }
+        : {}),
+
+      ...(category ? { category: category as any } : {}),
+
+      ...(color
+        ? {
+            color: {
+              equals: color,
+              mode: "insensitive" as const,
+            },
+          }
+        : {}),
+
+      ...(season ? { season: season as any } : {}),
+
+      ...(favorite !== undefined
+        ? { favorite }
+        : {}),
+
+      ...(status ? { status: status as any } : {}),
+
+      ...(size
+        ? {
+            size: {
+              equals: size,
+              mode: "insensitive" as const,
+            },
+          }
+        : {}),
+    };
 
   const [items, total] = await Promise.all([
     prisma.clothingItem.findMany({
       where: {
-        userId,
+        where
       },
       include: {
         images: true,
@@ -40,9 +97,7 @@ export const findAllClothingItems = async (
     }),
 
     prisma.clothingItem.count({
-      where: {
-        userId,
-      },
+      where
     }),
   ]);
 

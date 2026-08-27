@@ -36,13 +36,48 @@ export const getAllClothingItems = async (
     const page = Number(req.query.page ?? 1);
     const limit = Number(req.query.limit ?? 20);
 
+    const search = req.query.search
+      ? String(req.query.search)
+      : undefined;
+
+    const category = req.query.category
+      ? String(req.query.category)
+      : undefined;
+
+    const color = req.query.color
+      ? String(req.query.color)
+      : undefined;
+
+    const season = req.query.season
+      ? String(req.query.season)
+      : undefined;
+
+    const favorite =
+      req.query.favorite !== undefined
+        ? Boolean(req.query.favorite)
+        : undefined;
+
+    const status = req.query.status
+      ? String(req.query.status)
+      : undefined;
+
+    const size = req.query.size
+      ? String(req.query.size)
+      : undefined;
+
     const result =
       await wardrobeService.getAllClothingItems(
         req.user!.id,
         page,
         limit,
+        search,
+        category,
+        color,
+        season,
+        favorite,
+        status,
+        size,
       );
-
     return successResponse(res, result);
   } catch (error) {
     next(error);
