@@ -18,6 +18,7 @@ export const createClothingItem = (
 };
 
 export const findAllClothingItems = async (
+export const findAllClothingItems = async (
   userId: string,
   page: number,
   limit: number,
