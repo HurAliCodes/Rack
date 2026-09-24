@@ -12,6 +12,18 @@ export interface AuthRequest extends Request {
   params: {
     id: string;
   };
+  query: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    category?: string;
+    color?: string;
+    season?: string;
+    favorite?: boolean;
+    status?: string;
+    size?: string;
+    sort?: string;
+  };
 }
 
 export const authenticate = (

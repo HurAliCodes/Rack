@@ -35,4 +35,12 @@ export interface GetClothingItemsQuery {
   favorite?: boolean;
   status?: string;
   size?: string;
+  sort?: ClothingSort;
 }
+
+export type ClothingSort =
+  | "newest"
+  | "oldest"
+  | "name_asc"
+  | "name_desc"
+  | "recently_worn";

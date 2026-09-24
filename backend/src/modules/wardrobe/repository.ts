@@ -1,4 +1,5 @@
 import { prisma } from "../../infrastructure/database/prisma";
+import { ClothingStatus } from "@prisma/client";
 
 import {
   CreateClothingItemInput,
@@ -18,7 +19,6 @@ export const createClothingItem = (
 };
 
 export const findAllClothingItems = async (
-export const findAllClothingItems = async (
   userId: string,
   page: number,
   limit: number,
@@ -29,6 +29,7 @@ export const findAllClothingItems = async (
   favorite?: boolean,
   status?: string,
   size?: string,
+  sort: string = "newest"
 ) => {
   const skip = (page - 1) * limit;
   const where = {
@@ -81,6 +82,40 @@ export const findAllClothingItems = async (
           }
         : {}),
     };
+    
+  let orderBy;
+
+  switch (sort) {
+    case "oldest":
+      orderBy = {
+        createdAt: "asc" as const,
+      };
+      break;
+
+    case "name_asc":
+      orderBy = {
+        name: "asc" as const,
+      };
+      break;
+
+    case "name_desc":
+      orderBy = {
+        name: "desc" as const,
+      };
+      break;
+
+    case "recently_worn":
+      orderBy = {
+        lastWornAt: "desc" as const,
+      };
+      break;
+
+    case "newest":
+    default:
+      orderBy = {
+        createdAt: "desc" as const,
+      };
+  }
 
   const [items, total] = await Promise.all([
     prisma.clothingItem.findMany({
@@ -91,7 +126,7 @@ export const findAllClothingItems = async (
         images: true,
       },
       orderBy: {
-        createdAt: "desc",
+        orderBy
       },
       skip,
       take: limit,
@@ -147,5 +182,25 @@ export const deleteClothingItem = (
     where: {
       id,
     },
+  });
+};
+
+export const updateFavorite = (
+  id: string,
+  favorite: boolean,
+) => {
+  return prisma.clothingItem.update({
+    where: { id },
+    data: { favorite },
+  });
+};
+
+export const updateStatus = (
+  id: string,
+  status: ClothingStatus,
+) => {
+  return prisma.clothingItem.update({
+    where: { id },
+    data: { status },
   });
 };
