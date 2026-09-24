@@ -1,0 +1,1249 @@
+# AI DIGITAL WARDROBE — PROJECT CONTINUATION PROMPT
+
+You are continuing development of my **AI Digital Wardrobe** project.
+
+Read this entire prompt before doing anything.
+
+## IMPORTANT WORKING STYLE
+
+I am building this project step-by-step.
+
+I want you to:
+
+* Keep explanations SHORT.
+* Focus mainly on implementation.
+* Do NOT dump an entire phase at once.
+* Give me one implementation step at a time.
+* Give exact file paths and complete code when code needs to be changed.
+* After each step, tell me what command to run.
+* Wait for me to say `next` before continuing.
+* If I say `next`, continue from exactly where we stopped.
+* If I say `done`, move to the next logical step.
+* Do not unnecessarily redesign code that is already working.
+* Fix errors before moving forward.
+* Do not assume something is implemented unless this prompt says it is.
+* Do not rebuild completed authentication/profile functionality.
+
+I am learning backend development, so keep the architecture professional but beginner-friendly.
+
+---
+
+# 1. PROJECT IDEA
+
+The product is an **AI Digital Wardrobe**.
+
+The user uploads photos of their clothing and creates a digital version of their wardrobe.
+
+The long-term application will allow users to:
+
+* Upload clothing photos
+* Digitize their wardrobe
+* Organize clothes
+* Categorize clothing
+* Search/filter/sort wardrobe
+* Mark favorites
+* Archive clothing
+* Create outfits
+* Save outfits
+* Track outfit history
+* Get AI styling recommendations
+* Get AI-generated outfits
+* Detect clothing automatically from images
+* Detect category/color/style/material/pattern
+* Remove image backgrounds
+* Find similar clothing
+* Detect duplicate clothing
+* Analyze wardrobe usage
+* Suggest clothes based on weather/occasion
+* Eventually provide virtual try-on
+* Eventually provide AI stylist/chat
+* Eventually provide shopping assistance
+
+The application will eventually have:
+
+### Standard User
+
+Normal wardrobe and styling features.
+
+### Premium / Advanced AI User
+
+Advanced AI features, unlimited wardrobe storage, virtual try-on, premium styling tools, etc.
+
+### Admin
+
+User management, reports, analytics, application settings.
+
+Do NOT implement all of this at once.
+
+We are building it professionally in phases.
+
+---
+
+# 2. CURRENT TECHNOLOGY STACK
+
+## Backend
+
+* Node.js
+* Express.js
+* TypeScript
+* PostgreSQL
+* Prisma ORM
+* Zod
+* JWT
+* bcrypt
+* Vitest
+* Supertest
+
+## File Storage
+
+* Cloudinary
+* Multer
+
+## Development Tools
+
+* VS Code
+* Postman
+* npm
+* Prisma CLI
+* Git/GitHub
+
+## Planned Frontend
+
+* React
+* TypeScript
+* Tailwind CSS
+* React Router
+* TanStack Query
+
+## Future Technology
+
+Potentially:
+
+* Redis
+* Google OAuth
+* Apple OAuth
+* AI/LLM APIs
+* Computer Vision
+* Image processing
+* Embeddings/vector search
+* Virtual try-on models
+
+Do not introduce these until their phase.
+
+---
+
+# 3. BACKEND PROJECT STRUCTURE
+
+Current architecture:
+
+```text
+backend/
+│
+├── docker/
+│
+├── docs/
+│
+├── prisma/
+│   ├── migrations/
+│   ├── schema.prisma
+│   └── seed.ts
+│
+├── src/
+│   │
+│   ├── config/
+│   │   └── env.ts
+│   │
+│   ├── infrastructure/
+│   │   ├── cache/
+│   │   ├── database/
+│   │   │   └── prisma.ts
+│   │   ├── logger/
+│   │   ├── storage/
+│   │   │   └── cloudinary.ts
+│   │   └── email/
+│   │
+│   ├── modules/
+│   │   ├── auth/
+│   │   ├── profile/
+│   │   ├── wardrobe/
+│   │   └── clothingImage/
+│   │
+│   ├── routes/
+│   │
+│   ├── shared/
+│   │   ├── constants/
+│   │   ├── errors/
+│   │   ├── middleware/
+│   │   ├── types/
+│   │   └── utils/
+│   │
+│   ├── app.ts
+│   └── server.ts
+│
+├── tests/
+│
+├── .env
+├── .env.example
+├── package.json
+├── prisma.config.ts
+└── tsconfig.json
+```
+
+---
+
+# 4. MODULE ARCHITECTURE
+
+Each module generally follows:
+
+```text
+module/
+├── constants.ts
+├── controller.ts
+├── index.ts
+├── repository.ts
+├── routes.ts
+├── service.ts
+├── types.ts
+└── validation.ts
+```
+
+Responsibilities:
+
+### repository.ts
+
+Only database/Prisma operations.
+
+### service.ts
+
+Business logic.
+
+### controller.ts
+
+HTTP request/response handling.
+
+### routes.ts
+
+Routes + middleware.
+
+### validation.ts
+
+Zod validation schemas.
+
+### types.ts
+
+TypeScript types/interfaces.
+
+### constants.ts
+
+Module constants/error codes.
+
+### index.ts
+
+Module exports.
+
+Do NOT put database queries directly inside controllers.
+
+Do NOT put business logic inside repositories.
+
+---
+
+# 5. PHASE 0 — INFRASTRUCTURE
+
+STATUS:
+
+```text
+✅ COMPLETE
+```
+
+Implemented:
+
+* Express
+* TypeScript
+* PostgreSQL
+* Prisma
+* Docker
+* Prisma Client
+* Environment configuration
+* Logger
+* AppError
+* Global error handling
+* Validation middleware
+* API response helper
+* Health endpoint
+* 404 handling
+* Vitest
+* Supertest
+
+---
+
+# 6. PHASE 1 — AUTHENTICATION
+
+STATUS:
+
+```text
+✅ COMPLETE
+```
+
+Authentication is already built and tested.
+
+DO NOT rebuild it.
+
+Implemented:
+
+* Register
+* Login
+* Logout
+* Access tokens
+* Refresh tokens
+* Protected routes
+* Authentication middleware
+* Authorization
+* Forgot password
+* Reset password
+* Password reset email
+* Email verification
+* Verification email
+* Current authenticated user
+
+Endpoints:
+
+```text
+POST /api/v1/auth/register
+POST /api/v1/auth/login
+POST /api/v1/auth/logout
+POST /api/v1/auth/refresh
+GET  /api/v1/auth/me
+POST /api/v1/auth/forgot-password
+POST /api/v1/auth/reset-password
+POST /api/v1/auth/verify-email
+```
+
+JWT contains:
+
+```text
+sub
+role
+```
+
+Passwords use bcrypt.
+
+Refresh tokens are securely hashed before database storage.
+
+Authentication was tested with Postman and is working.
+
+---
+
+# 7. IMPORTANT AUTH TYPES
+
+The project uses authenticated requests.
+
+Protected controllers access:
+
+```ts
+req.user!.id
+```
+
+Routes commonly use:
+
+```ts
+router.use(authenticate);
+```
+
+Reuse the existing authentication middleware.
+
+Do not create another authentication system.
+
+---
+
+# 8. VALIDATION MIDDLEWARE
+
+Existing validation middleware is:
+
+```ts
+import { NextFunction, Request, Response } from "express";
+import { z, ZodObject } from "zod";
+
+export const validate = (schema: ZodObject<any>) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
+    const result = schema.safeParse({
+      body: req.body,
+      query: req.query,
+      params: req.params,
+    });
+
+    if (!result.success) {
+      return next(result.error);
+    }
+
+    req.body = result.data.body;
+    req.query = result.data.query;
+    req.params = result.data.params;
+
+    next();
+  };
+};
+```
+
+This is currently working.
+
+Do not replace it unless necessary.
+
+---
+
+# 9. ERROR HANDLING
+
+Use the existing AppError system.
+
+Example:
+
+```ts
+throw new AppError(
+  "Clothing item not found",
+  404,
+  "CLOTHING_ITEM_NOT_FOUND",
+);
+```
+
+Do not create a second error system.
+
+---
+
+# 10. API RESPONSE
+
+Use the existing:
+
+```ts
+successResponse(...)
+```
+
+Do not create another response format.
+
+---
+
+# 11. PHASE 2 — USER PROFILE
+
+STATUS:
+
+```text
+✅ COMPLETE
+```
+
+Profile functionality has been implemented.
+
+Profile includes fields such as:
+
+```text
+name
+avatarUrl
+avatarPublicId
+gender
+height
+weight
+preferredStyles
+favoriteColors
+topSize
+bottomSize
+shoeSize
+theme
+notificationsEnabled
+```
+
+Endpoints:
+
+```text
+GET    /api/v1/profile
+PATCH  /api/v1/profile
+PATCH  /api/v1/profile/avatar
+DELETE /api/v1/profile/avatar
+```
+
+Avatar functionality:
+
+* Multer
+* Cloudinary
+* Upload avatar
+* Store Cloudinary URL
+* Store Cloudinary public ID
+* Delete old avatar when replacing
+* Delete Cloudinary image when avatar is removed
+
+Cloudinary integration already works.
+
+---
+
+# 12. CLOUDINARY
+
+Existing file:
+
+```text
+src/infrastructure/storage/cloudinary.ts
+```
+
+Environment variables:
+
+```env
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+```
+
+Cloudinary supports:
+
+* Upload from Buffer
+* Secure URL
+* Public ID
+* Delete image
+
+Folders:
+
+```text
+avatars/
+clothing/
+```
+
+Multer middleware:
+
+```text
+src/shared/middleware/upload.ts
+```
+
+Current upload approach:
+
+```text
+Multer
+   ↓
+Buffer
+   ↓
+Cloudinary
+   ↓
+Database
+```
+
+---
+
+# 13. PHASE 3 — DIGITAL WARDROBE
+
+STATUS:
+
+```text
+🟡 COMPLETE FOR CURRENT SCOPE
+```
+
+The wardrobe foundation has been implemented.
+
+Module:
+
+```text
+src/modules/wardrobe/
+
+├── constants.ts
+├── controller.ts
+├── index.ts
+├── repository.ts
+├── routes.ts
+├── service.ts
+├── types.ts
+└── validation.ts
+```
+
+---
+
+# 14. CLOTHING ITEM
+
+Current model concept:
+
+```prisma
+model ClothingItem {
+  id String @id @default(uuid())
+
+  name String?
+
+  category ClothingCategory @default(UNKNOWN)
+
+  brand String?
+
+  color String?
+
+  season ClothingSeason?
+
+  size String?
+
+  notes String?
+
+  favorite Boolean @default(false)
+
+  status ClothingStatus @default(AVAILABLE)
+
+  lastWornAt DateTime?
+
+  userId String
+
+  user User @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  images ClothingImage[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+}
+```
+
+IMPORTANT:
+
+`category` has:
+
+```text
+@default(UNKNOWN)
+```
+
+This was intentional.
+
+Reason:
+
+A clothing item can be created before AI analyzes the image.
+
+Later AI can detect the category and update it.
+
+Workflow:
+
+```text
+Create clothing
+      ↓
+category = UNKNOWN
+      ↓
+AI analyzes image
+      ↓
+AI detects category
+      ↓
+Update category
+```
+
+---
+
+# 15. CLOTHING ENUMS
+
+Current categories include:
+
+```text
+UNKNOWN
+TSHIRT
+SHIRT
+POLO
+HOODIE
+JACKET
+SWEATER
+JEANS
+PANTS
+SHORTS
+JOGGERS
+DRESS
+SKIRT
+SUIT
+SHOES
+ACCESSORY
+```
+
+Season:
+
+```text
+SPRING
+SUMMER
+AUTUMN
+WINTER
+ALL_SEASON
+```
+
+Status:
+
+```text
+AVAILABLE
+ARCHIVED
+```
+
+---
+
+# 16. CURRENT WARDROBE ENDPOINTS
+
+```text
+POST   /api/v1/wardrobe/items
+GET    /api/v1/wardrobe/items
+GET    /api/v1/wardrobe/items/:id
+PATCH  /api/v1/wardrobe/items/:id
+DELETE /api/v1/wardrobe/items/:id
+```
+
+Additional operations:
+
+```text
+PATCH /api/v1/wardrobe/items/:id/favorite
+PATCH /api/v1/wardrobe/items/:id/archive
+PATCH /api/v1/wardrobe/items/:id/restore
+```
+
+All are protected.
+
+User ownership is checked.
+
+---
+
+# 17. WARDROBE PAGINATION
+
+Implemented.
+
+Query:
+
+```text
+GET /api/v1/wardrobe/items?page=1&limit=20
+```
+
+Response contains:
+
+```text
+items
+total
+page
+limit
+totalPages
+```
+
+Default:
+
+```text
+page = 1
+limit = 20
+```
+
+Maximum limit:
+
+```text
+100
+```
+
+---
+
+# 18. WARDROBE SEARCH
+
+Implemented.
+
+Searches:
+
+```text
+name
+brand
+```
+
+Example:
+
+```text
+GET /api/v1/wardrobe/items?search=black
+```
+
+Search is case-insensitive.
+
+---
+
+# 19. WARDROBE FILTERS
+
+Implemented:
+
+```text
+category
+color
+season
+favorite
+status
+size
+```
+
+Examples:
+
+```text
+GET /api/v1/wardrobe/items?category=TSHIRT
+```
+
+```text
+GET /api/v1/wardrobe/items?color=Black
+```
+
+```text
+GET /api/v1/wardrobe/items?favorite=true
+```
+
+Multiple filters:
+
+```text
+GET /api/v1/wardrobe/items?category=TSHIRT&color=Black&favorite=true
+```
+
+---
+
+# 20. WARDROBE SORTING
+
+Implemented:
+
+```text
+newest
+oldest
+name_asc
+name_desc
+recently_worn
+```
+
+Examples:
+
+```text
+GET /api/v1/wardrobe/items?sort=newest
+```
+
+```text
+GET /api/v1/wardrobe/items?sort=name_asc
+```
+
+```text
+GET /api/v1/wardrobe/items?sort=recently_worn
+```
+
+---
+
+# 21. FAVORITES AND ARCHIVE
+
+Implemented:
+
+```text
+PATCH /api/v1/wardrobe/items/:id/favorite
+PATCH /api/v1/wardrobe/items/:id/archive
+PATCH /api/v1/wardrobe/items/:id/restore
+```
+
+Favorite toggles:
+
+```text
+false → true
+true  → false
+```
+
+Archive:
+
+```text
+AVAILABLE → ARCHIVED
+```
+
+Restore:
+
+```text
+ARCHIVED → AVAILABLE
+```
+
+---
+
+# 22. CLOTHING IMAGES
+
+Images are a separate module:
+
+```text
+src/modules/clothingImage/
+
+├── constants.ts
+├── controller.ts
+├── index.ts
+├── repository.ts
+├── routes.ts
+├── service.ts
+├── types.ts
+└── validation.ts
+```
+
+This was intentionally separated from clothing items.
+
+One clothing item can have multiple images.
+
+Example:
+
+```text
+Black T-Shirt
+├── Front
+├── Back
+├── Side
+└── Detail
+```
+
+---
+
+# 23. CLOTHING IMAGE DATABASE MODEL
+
+```prisma
+model ClothingImage {
+  id String @id @default(uuid())
+
+  imageUrl String
+
+  imagePublicId String
+
+  isCover Boolean @default(false)
+
+  clothingItemId String
+
+  clothingItem ClothingItem @relation(
+    fields: [clothingItemId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  createdAt DateTime @default(now())
+}
+```
+
+---
+
+# 24. CLOTHING IMAGE ENDPOINTS
+
+```text
+POST   /api/v1/wardrobe/items/:id/images
+GET    /api/v1/wardrobe/items/:id/images
+DELETE /api/v1/wardrobe/images/:id
+PATCH  /api/v1/wardrobe/images/:id/cover
+```
+
+Upload:
+
+```text
+POST /api/v1/wardrobe/items/:id/images
+```
+
+Form-data field:
+
+```text
+image
+```
+
+---
+
+# 25. COVER IMAGE LOGIC
+
+The first uploaded image becomes the cover.
+
+If the cover image is deleted and other images exist:
+
+```text
+Deleted cover
+      ↓
+Find another image
+      ↓
+Make another image the cover
+```
+
+There is also a dedicated endpoint:
+
+```text
+PATCH /api/v1/wardrobe/images/:id/cover
+```
+
+Cloudinary image is deleted when a clothing image is deleted.
+
+Ownership is checked before modification.
+
+---
+
+# 26. CURRENT TESTING
+
+Postman has been used throughout development.
+
+Authentication:
+
+```text
+✅ Working
+```
+
+Profile:
+
+```text
+✅ Working
+```
+
+Wardrobe:
+
+```text
+Testing has been performed throughout implementation.
+```
+
+Build command:
+
+```bash
+npm run build
+```
+
+Tests:
+
+```bash
+npm test
+```
+
+Use both before considering a phase complete.
+
+---
+
+# 27. CURRENT PHASE STATUS
+
+```text
+Phase 0 — Infrastructure       ✅ COMPLETE
+Phase 1 — Authentication       ✅ COMPLETE
+Phase 2 — User Profile         ✅ COMPLETE
+Phase 3 — Digital Wardrobe     ✅ CURRENT FOUNDATION COMPLETE
+Phase 4 — Search/Filters/etc.  ✅ COMPLETE
+Phase 5 — Better Clothing Data 🟡 NEXT
+```
+
+---
+
+# 28. WHAT WE WILL DO NEXT
+
+The next major phase is:
+
+# PHASE 5 — BETTER CLOTHING DATA & IMAGE MANAGEMENT
+
+The goal is to prepare the wardrobe properly for the future AI system.
+
+Planned order:
+
+```text
+Phase 5.1
+Improve clothing metadata
+
+Phase 5.2
+Improve category/type system
+
+Phase 5.3
+Improve colors
+
+Phase 5.4
+Improve clothing attributes
+
+Phase 5.5
+Image metadata
+
+Phase 5.6
+Image validation/improvements
+
+Phase 5.7
+Clothing item update improvements
+
+Phase 5.8
+Testing
+```
+
+After that we will eventually move toward:
+
+```text
+Phase 6 — Outfit System
+
+Phase 7 — AI Clothing Analysis
+
+Phase 8 — AI Outfit Recommendations
+
+Phase 9 — Advanced AI Features
+
+Phase 10 — Premium Features
+
+Phase 11 — Admin
+
+Phase 12 — Frontend
+
+Phase 13 — Production/Deployment
+```
+
+These later phases are not implemented yet.
+
+---
+
+# 29. IMPORTANT: DO NOT START AI YET
+
+The AI system will eventually need reliable structured clothing data.
+
+Therefore, before AI:
+
+```text
+Clothing
+Images
+Categories
+Colors
+Seasons
+Styles
+Materials
+Patterns
+Brands
+Sizes
+Favorites
+Usage history
+```
+
+need to be structured properly.
+
+Do not rush into AI APIs yet.
+
+---
+
+# 30. CODING STYLE
+
+The user prefers:
+
+* No class-based architecture.
+* Functional/module-based architecture.
+* Small implementation steps.
+* Complete code instead of fragments where practical.
+* Minimal explanations.
+* Exact file paths.
+* No unnecessary theory.
+
+Example architecture:
+
+```text
+Controller
+    ↓
+Service
+    ↓
+Repository
+    ↓
+Prisma
+    ↓
+PostgreSQL
+```
+
+Do not introduce classes unless there is a strong reason.
+
+---
+
+# 31. ERROR HANDLING RULE
+
+If TypeScript gives an error, fix the actual error instead of changing unrelated architecture.
+
+One previous issue involved:
+
+```text
+TS7030 Not all code paths return a value
+```
+
+The project's TypeScript configuration has the relevant implicit-return checking disabled, so do not unnecessarily modify working controllers just to force explicit returns unless required by the current configuration.
+
+---
+
+# 32. PRISMA RULE
+
+When Prisma schema changes:
+
+```bash
+npx prisma migrate dev --name <migration_name>
+npx prisma generate
+```
+
+Then:
+
+```bash
+npm run build
+```
+
+---
+
+# 33. POSTMAN
+
+The user uses Postman for API testing.
+
+When a feature is completed:
+
+1. Build.
+2. Run server.
+3. Test endpoint in Postman.
+4. Test authentication.
+5. Test ownership where applicable.
+6. Test invalid input.
+7. Only then move forward.
+
+---
+
+# 34. SECURITY RULES
+
+User-owned data must always be scoped to the authenticated user.
+
+Example:
+
+```ts
+where: {
+  id,
+  userId,
+}
+```
+
+Never allow:
+
+```text
+User A → access User B's clothing
+```
+
+Image ownership must also be checked.
+
+Cloudinary cleanup must happen when database records are intentionally deleted.
+
+---
+
+# 35. PERFORMANCE / SCALABILITY
+
+Keep scalability in mind, but do not over-engineer.
+
+Already planned/possible later:
+
+* Pagination
+* Database indexes
+* Redis
+* Caching
+* Background jobs
+* Image processing queues
+* AI processing queues
+* Object storage
+* Vector search
+
+Only introduce them when the feature actually requires them.
+
+---
+
+# 36. WHEN I SAY "NEXT"
+
+When I type:
+
+```text
+next
+```
+
+do NOT ask what I want to do.
+
+Look at this project state and continue with the next implementation step.
+
+Give me:
+
+1. Phase/step title
+2. Exact file(s)
+3. Code
+4. Build/test command
+5. Very short explanation
+
+Then stop and wait.
+
+---
+
+# 37. EXACT STARTING POINT
+
+We are about to start:
+
+```text
+PHASE 5.1 — Improve Clothing Metadata
+```
+
+Start with the first implementation step only.
+
+Do not explain the entire Phase 5.
+
+Do not repeat the project history unless needed.
+
+Just start implementation.

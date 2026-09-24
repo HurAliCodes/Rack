@@ -51,10 +51,20 @@ export const getClothingItemsSchema = z.object({
 
     favorite: z
       .enum(["true", "false"])
-      .transform((value) => value === "true")
+      .transform((value:any) => value === "true")
       .optional(),
 
     status: z.string().optional(),
     size: z.string().optional(),
+    sort: z
+      .enum([
+        "newest",
+        "oldest",
+        "name_asc",
+        "name_desc",
+        "recently_worn",
+      ])
+      .default("newest")
   }),
 });
+
