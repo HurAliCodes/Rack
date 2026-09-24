@@ -65,6 +65,10 @@ export const getAllClothingItems = async (
       ? String(req.query.size)
       : undefined;
 
+    const sort = req.query.sort
+      ? String(req.query.sort)
+      : "newest";
+
     const result =
       await wardrobeService.getAllClothingItems(
         req.user!.id,
@@ -77,6 +81,7 @@ export const getAllClothingItems = async (
         favorite,
         status,
         size,
+        sort
       );
     return successResponse(res, result);
   } catch (error) {
@@ -145,6 +150,60 @@ export const deleteClothingItem = async (
           "Clothing item deleted successfully",
       },
     );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const toggleFavorite = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const item =
+      await wardrobeService.toggleFavorite(
+        req.user!.id,
+        req.params.id,
+      );
+
+    return successResponse(res, item);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const archiveClothingItem = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const item =
+      await wardrobeService.archiveClothingItem(
+        req.user!.id,
+        req.params.id,
+      );
+
+    return successResponse(res, item);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const restoreClothingItem = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const item =
+      await wardrobeService.restoreClothingItem(
+        req.user!.id,
+        req.params.id,
+      );
+
+    return successResponse(res, item);
   } catch (error) {
     next(error);
   }

@@ -17,6 +17,9 @@ router
   .get( "/items", validate(getClothingItemsSchema), controller.getAllClothingItems)
   .get("/items/:id", controller.getClothingItem)
   .patch("/items/:id", validate(updateClothingItemSchema), controller.updateClothingItem)
-  .delete("/items/:id", controller.deleteClothingItem);
+  .delete("/items/:id", controller.deleteClothingItem)
+  .patch("/items/:id/favorite", controller.toggleFavorite)
+  .patch("/items/:id/archive", controller.archiveClothingItem)
+  .patch("/items/:id/restore", controller.restoreClothingItem);
 
 export default router;
